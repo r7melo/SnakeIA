@@ -1,0 +1,47 @@
+<Snake>:
+    size_hint: (None, None)
+    size: (10,10)
+    canvas:
+        Color:
+            rgb: (0,1,0)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<BodySnake>:     
+    size_hint: (None, None)
+    size: (10,10)
+    canvas:
+        Color:
+            rgb: (0,.8,0)
+        Rectangle:
+            size: self.size
+            pos: (-1000, -1000)
+
+<Game>:
+    snake: snake
+    size_hint: (None, None)
+    size: (500,500)
+    canvas:
+        Color:
+            rgba: (.8,.8,.8,.1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    
+    Snake:
+        id: snake
+        pos: (self.parent.x + self.head_pos.x * 10, self.parent.y + self.head_pos.y * 10)
+
+
+FloatLayout:
+    canvas:
+        Color:
+            rgb: (.2,.2,.2)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    Game:
+        center: (root.width/2, root.height/2)
+
