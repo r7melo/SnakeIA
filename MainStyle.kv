@@ -1,14 +1,15 @@
 <Snake>:
     size_hint: (None, None)
     size: (10,10)
+    pos: (-1000, -1000)
     canvas:
         Color:
-            rgb: (0,1,0)
+            rgb: (0,.3,.8)
         Rectangle:
             size: self.size
             pos: self.pos
 
-<BodySnake>:     
+<HailSnake>:     
     size_hint: (None, None)
     size: (10,10)
     canvas:
@@ -16,10 +17,9 @@
             rgb: (0,.8,0)
         Rectangle:
             size: self.size
-            pos: (-1000, -1000)
+            pos: self.pos
 
 <Game>:
-    snake: snake
     size_hint: (None, None)
     size: (500,500)
     canvas:
@@ -28,10 +28,6 @@
         Rectangle:
             size: self.size
             pos: self.pos
-    
-    Snake:
-        id: snake
-        pos: (self.parent.x + self.head_pos.x * 10, self.parent.y + self.head_pos.y * 10)
 
 
 FloatLayout:
