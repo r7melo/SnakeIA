@@ -15,8 +15,8 @@ class Game(Widget):
         self.snakes:list[Snake] = []
 
         for i in range(100):
-            snake = SnakeHead(Vector(20,25))
-            snake.clock = Clock.schedule_interval(snake.reload_snake, 1/10)
+            snake = SnakeHead(Vector(14,25))
+            snake.clock = Clock.schedule_interval(snake.reload_snake, 1/60)
             self.add_widget(snake)
             self.snakes.append(snake)
             

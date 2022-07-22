@@ -19,7 +19,7 @@ class Snake(Widget):
         self.current_position:Vector = current_position
         self.eat:bool = False
         self.hail:Snake = None
-        self.mov:MOV = choice([MOV.DOWM, MOV.LEFT, MOV.RIGTH, MOV.UP])
+        self.mov:MOV = MOV.RIGTH
 
     def get_position_absolute(self, pos) -> Vector:
         return Vector(pos) + self.current_position * 10
