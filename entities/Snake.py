@@ -10,8 +10,9 @@ class MOV(Enum):
     DOWM  = lambda:Vector( 0,-1)
 
 
+
 class Snake(Widget):
-    def __init__(self, current_position=Vector(25,25), root=None, **kwargs):
+    def __init__(self, current_position=Vector(25,25), root:Widget=None, **kwargs):
         super().__init__(**kwargs)
         self.root = root
         self.current_position:Vector = current_position
@@ -26,13 +27,27 @@ class Snake(Widget):
     def update(self, dt=None):
         self.pos = self.get_position_absolute()
         if not self.hail is None: self.hail.update()
+    
+    def wall_collision(self, current_position:Vector):
+        x, y = current_position.x, current_position.y
+        if x >= 50 or y >= 50 or x < 0 or y < 0:
+            print("GAME OVER")
+            self.root.clock_reload_snake.cancel()
 
     def reload_snake(self, dt=None, mov:Vector=None):
         self.mov_head()
+        self.eat_fruit(self.eat)
+        
+        
             
     def mov_head(self):
         current_position = Vector(self.current_position)
-        self.current_position += self.mov()
+        new_current_position = self.current_position + self.mov()
+
+        self.wall_collision(new_current_position)
+
+        self.current_position = new_current_position
+
         if not self.hail is None: 
             self.hail.mov_hail(current_position)
 
@@ -41,7 +56,20 @@ class Snake(Widget):
             self.hail.mov_hail(self.current_position)
         self.current_position = current_position
 
+    def eat_fruit(self, eat:bool):
+        if not self.hail is None:
+            self.hail.eat_fruit(eat)
+
+        else:
+            if eat:
+                self.hail = Snake(Vector(self.current_position), root=self.root)
+                self.root.add_widget(self.hail)
         
+        self.eat = False
+
+
+class SnakeHead(Snake):
+    pass 
         
 
         

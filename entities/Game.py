@@ -4,7 +4,7 @@ from kivy.core.window import Window
 from kivy.clock import Clock
 from kivy.vector import Vector
 
-from entities.Snake import Snake, MOV
+from entities.Snake import Snake, MOV, SnakeHead
 
 class Game(Widget):
     def __init__(self, **kwargs):
@@ -12,7 +12,7 @@ class Game(Widget):
         Window.size = (550, 550)
         Window.minimum_width, Window.minimum_height = Window.size
                 
-        head = Snake(Vector(21,20), root=self)
+        head = SnakeHead(Vector(21,20), root=self)
         body0 = Snake(Vector(20,20), root=self)
         body1 = Snake(Vector(19,20), root=self)
         body2 = Snake(Vector(18,20), root=self)
@@ -33,13 +33,12 @@ class Game(Widget):
 
 
 
-        Clock.schedule_interval(self.snake.update, 1/60)
+        self.clock_snake_update = Clock.schedule_interval(self.snake.update, 1/60)
+        self.clock_reload_snake = Clock.schedule_interval(self.snake.reload_snake, 1/10)
 
-        Clock.schedule_interval(self.snake.reload_snake, 1/2)
 
-
-        Clock.schedule_interval(self.random_mov, 2)
-        #Clock.schedule_interval(self.eattemp, 5)
+        Clock.schedule_interval(self.random_mov, 7)
+        Clock.schedule_interval(self.eattemp, 2)
 
         
 
