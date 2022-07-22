@@ -11,42 +11,38 @@ class Game(Widget):
         super().__init__(**kwargs)
         Window.size = (550, 550)
         Window.minimum_width, Window.minimum_height = Window.size
+
+        self.snakes:list[Snake] = []
+
+        for i in range(100):
+            snake = SnakeHead(Vector(20,25))
+            snake.clock = Clock.schedule_interval(snake.reload_snake, 1/10)
+            self.add_widget(snake)
+            self.snakes.append(snake)
+            
+            for x in range(10):
+                snake.eat = True
+                snake.reload_snake()
                 
-        head = SnakeHead(Vector(21,20), root=self)
-        body0 = Snake(Vector(20,20), root=self)
-        body1 = Snake(Vector(19,20), root=self)
-        body2 = Snake(Vector(18,20), root=self)
-        hail = Snake(Vector(17,20), root=self)
+        self.clock_snake_update = Clock.schedule_interval(self.update, 1/60)
 
-        body2.hail = hail
-        body1.hail = body2
-        body0.hail = body1
-        head.hail = body0
-
-        self.snake = head
-         
-        self.add_widget(self.snake)
-        self.add_widget(body0)
-        self.add_widget(body1)
-        self.add_widget(body2)
-        self.add_widget(hail)
-
-
-
-        self.clock_snake_update = Clock.schedule_interval(self.snake.update, 1/60)
-        self.clock_reload_snake = Clock.schedule_interval(self.snake.reload_snake, 1/10)
-
-
-        Clock.schedule_interval(self.random_mov, 7)
-        Clock.schedule_interval(self.eattemp, 2)
-
+    def update(self, dt) -> None:
+        for snake in self.snakes:
+            snake.update()
+            if self.is_snake_collision(snake, snake.hail): 
+                snake.clock.cancel()
+            
+            #random mov
+            snake.mov = choice([MOV.DOWM, MOV.LEFT, MOV.RIGTH, MOV.UP]) 
         
-
-    def eattemp(self, dt):
-        self.snake.eat = True
-
-    def random_mov(self, dt):
-        self.snake.mov = choice([MOV.DOWM, MOV.LEFT, MOV.RIGTH, MOV.UP])
+    def is_snake_collision(self, head:Snake, hail:Snake) -> bool:
+        if not hail is None:
+            if head.current_position == hail.current_position:
+                return True 
+            else:
+                self.is_snake_collision(head, hail.hail)   
+        else:
+            return False
 
 
         
