@@ -37,14 +37,14 @@ class Brain:
         for motion_neuron in self.motion_neurons:
             if motion_neuron.type == motion.type:
                 motion_neuron.value += motion.value
-        
-        for position_neuron in self.position_neurons:
-            if position_neuron.type == position.type:
-                position_neuron.value += position.value
+                
+                for position_neuron in motion_neuron.next_neuron:
+                    if position_neuron.type == position.type:
+                        position_neuron.value += position.value
 
-        for survival_neuron in self.survival_neurons:
-            if survival_neuron.type == survival.type:
-                survival_neuron.value += survival.value
+                        for survival_neuron in position_neuron.next_neuron:
+                            if survival_neuron.type == survival.type:
+                                survival_neuron.value += survival.value
                 
     def to_memorize(self):
         with open('brain_memories/motion_neurons.pkl', 'wb') as brain_memories:
@@ -61,6 +61,16 @@ class Brain:
             self.position_neurons = pickle.load(position_neurons)
         with open('brain_memories/motion_neurons.pkl', 'rb') as survival_neurons:
             self.survival_neurons = pickle.load(survival_neurons)
+
+    def show_network(self):
+        for motion in self.motion_neurons:
+            print("[{0}:{1}]".format(motion.type, motion.value))
+
+            for position in motion.next_neuron:
+                print("\t[{0}:{1}]".format(position.type, position.value))
+
+                for survival in position.next_neuron:
+                    print("\t\t[{0}:{1}]".format(survival.type, survival.value))
         
 
         
