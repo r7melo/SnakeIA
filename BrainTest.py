@@ -13,8 +13,6 @@ b.activate_neuron(Neuron(NeuronType.LEFT, 1), Neuron(NeuronType.X, 1), Neuron(Ne
 
 b.to_memorize()
 
-print(b.motion_neurons[0].value)
-print(b.position_neurons[0].value)
-print(b.survival_neurons[0].value)
+b.show_network()+
 
 
