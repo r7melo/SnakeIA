@@ -11,42 +11,45 @@ class MOV(Enum):
 
 
 class Snake(Widget):
-    def __init__(self, head_pos=Vector(0,25), **kwargs):
+    def __init__(self, current_position=Vector(25,25), root=None, **kwargs):
         super().__init__(**kwargs)
-        
-        self.position = self.pos
-        self.eat = False
-        self.hail = None
-        self.head_pos = head_pos
-        self.mov = MOV.RIGTH
+        self.root = root
+        self.current_position:Vector = current_position
+        self.pos = self.get_position_absolute()
+        self.eat:bool = False
+        self.hail:Snake = None
+        self.mov:MOV = MOV.RIGTH
+
+    def get_position_absolute(self):
+        return Vector(self.root.pos) + self.current_position * 10
     
     def update(self, dt=None):
-        self.pos = self.position
-        if self.hail is not None: self.hail.update()
+        self.pos = self.get_position_absolute()
+        if not self.hail is None: self.hail.update()
 
-    def reload_snake(self, dt=None):
-        self.head_pos += self.mov()
-
-        if self.head_pos.x >= 50 or self.head_pos.y >= 50 or self.head_pos.x < 0 or self.head_pos.y < 0:
-            print("GAME OVER")
-            self.color_background = (.1,.9,.1,.1)
-            self.parent.clock.cancel()
-        else:
-            self.position = Vector(self.parent.pos) + self.head_pos * 10
-
-        if self.hail is None:
-            if self.eat:
-                self.hail = Snake(self.head_pos - self.mov())
-                self.parent.add_widget(self.hail)
-                self.eat = False
-        else:
-            self.hail.reload_snake()
-            self.hail.mov = self.mov
-
-            if self.eat:
-                self.hail.eat = True
-                self.eat = False
+    def reload_snake(self, dt=None, mov:Vector=None):
+        self.mov_head()
             
+    def mov_head(self):
+        current_position = Vector(self.current_position)
+        self.current_position += self.mov()
+        if not self.hail is None: 
+            self.hail.mov_hail(current_position)
+
+    def mov_hail(self, current_position):
+        if not self.hail is None: 
+            self.hail.mov_hail(self.current_position)
+        self.current_position = current_position
+
+        
+        
+
+        
+        
+
+
+
+
 
 
 
